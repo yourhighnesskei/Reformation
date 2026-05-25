@@ -238,7 +238,7 @@
             end)
         
             Library:Connection(InputService.InputChanged, function(input, game_event) 
-                if IsResizing and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch)vement then            
+                if IsResizing and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then            
                     Parent.Size = dim2(
                         Size.X.Scale,
                         math.clamp(Size.X.Offset + (input.Position.X - InputLost.X), ParentSize.X.Offset, Camera.ViewportSize.X), 
@@ -287,7 +287,7 @@
             end)
 
             Library:Connection(InputService.InputChanged, function(Input, game_event) 
-                if Dragging and (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch)vement then
+                if Dragging and (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch) then
                     local Horizontal = Camera.ViewportSize.X
                     local Vertical = Camera.ViewportSize.Y
 
@@ -1189,7 +1189,7 @@
             end)
 
             InputService.InputChanged:Connect(function(input)
-                if (DraggingSat or DraggingHue or DraggingAlpha) and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch)vement then
+                if (DraggingSat or DraggingHue or DraggingAlpha) and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
                     Cfg.UpdateColor() 
                 end
             end)
@@ -3713,7 +3713,7 @@
             end)
 
             Library:Connection(InputService.InputChanged, function(input)
-                if Cfg.Dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch)vement then 
+                if Cfg.Dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then 
                     local Size = (input.Position.X - Items.Outline.AbsolutePosition.X) / Items.Outline.AbsoluteSize.X
                     local Value = ((Cfg.Max - Cfg.Min) * Size) + Cfg.Min
                     Cfg.Set(Value)
