@@ -224,7 +224,7 @@
             local ParentSize = Parent.Size  
             
             Resizing.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
                     IsResizing = true
                     InputLost = input.Position
                     Size = Parent.Size
@@ -232,13 +232,13 @@
             end)
         
             Resizing.InputEnded:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
                     IsResizing = false
                 end
             end)
         
             Library:Connection(InputService.InputChanged, function(input, game_event) 
-                if IsResizing and input.UserInputType == Enum.UserInputType.MouseMovement then            
+                if IsResizing and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch)vement then            
                     Parent.Size = dim2(
                         Size.X.Scale,
                         math.clamp(Size.X.Offset + (input.Position.X - InputLost.X), ParentSize.X.Offset, Camera.ViewportSize.X), 
@@ -273,7 +273,7 @@
             local InitialPosition 
 
             Parent.InputBegan:Connect(function(Input)
-                if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+                if (Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch) then
                     Dragging = true
                     InitialPosition = Input.Position
                     InitialSize = Parent.Position
@@ -281,13 +281,13 @@
             end)
 
             Parent.InputEnded:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
                     Dragging = false
                 end
             end)
 
             Library:Connection(InputService.InputChanged, function(Input, game_event) 
-                if Dragging and Input.UserInputType == Enum.UserInputType.MouseMovement then
+                if Dragging and (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch)vement then
                     local Horizontal = Camera.ViewportSize.X
                     local Vertical = Camera.ViewportSize.Y
 
@@ -1084,7 +1084,7 @@
                 Index:Slider({Name = "Speed", Min = 0, Max = 100, Interval = 1, Suffix = "%", Flag = Cfg.Flag .. "_ANIMATION_SPEED"})
                 
                 Library:Connection(InputService.InputBegan, function(input, game_event) 
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
                         if Items.Colorpicker.Visible and not Library:Hovering({
                                 Items.ColorpickerObject, 
                                 Items.Dropdown.Items.DropdownElements, 
@@ -1111,7 +1111,7 @@
                 local Pickers = {Items.Primary, Items.Secondary}
                 for _,picker in Pickers do
                     Library:Connection(InputService.InputBegan, function(input, game_event)
-                        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                        if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
                             if picker.Items.Colorpicker.Visible and not Library:Hovering({picker.Items.ColorpickerObject, picker.Items.Colorpicker}) then
                                 picker.SetVisible(false)
                                 picker.Open = false
@@ -1189,13 +1189,13 @@
             end)
 
             InputService.InputChanged:Connect(function(input)
-                if (DraggingSat or DraggingHue or DraggingAlpha) and input.UserInputType == Enum.UserInputType.MouseMovement then
+                if (DraggingSat or DraggingHue or DraggingAlpha) and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch)vement then
                     Cfg.UpdateColor() 
                 end
             end)
 
             Library:Connection(InputService.InputEnded, function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
                     DraggingSat = false
                     DraggingHue = false
                     DraggingAlpha = false
@@ -1898,7 +1898,7 @@
                         TextColor3 = rgb(239, 239, 239);
                         BorderColor3 = rgb(0, 0, 0);
                         RichText = true;
-                        Text = Cfg.Name .. "lua";
+                        Text = "Reformation.gg";
                         Parent = Items.Watermark;
                         Name = "\0";
                         BackgroundTransparency = 1;
@@ -1925,7 +1925,7 @@
                     Library:Create( "ImageLabel" , {
                         BorderColor3 = rgb(0, 0, 0);
                         Parent = Items.Watermark;
-                        Image = "rbxassetid://133601737414791";
+                        Image = "rbxassetid://127533950767145";
                         BackgroundTransparency = 1;
                         Position = dim2(0, 3, 0, 2);
                         Size = dim2(0, 11, 0, 15);
@@ -3713,7 +3713,7 @@
             end)
 
             Library:Connection(InputService.InputChanged, function(input)
-                if Cfg.Dragging and input.UserInputType == Enum.UserInputType.MouseMovement then 
+                if Cfg.Dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch)vement then 
                     local Size = (input.Position.X - Items.Outline.AbsolutePosition.X) / Items.Outline.AbsoluteSize.X
                     local Value = ((Cfg.Max - Cfg.Min) * Size) + Cfg.Min
                     Cfg.Set(Value)
@@ -3721,7 +3721,7 @@
             end)
 
             Library:Connection(InputService.InputEnded, function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
                     Cfg.Dragging = false
                 end 
             end)
@@ -4069,7 +4069,7 @@
             end)
 
             Library:Connection(InputService.InputBegan, function(input, game_event)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
                     print("clicked")
                     if (Items.DropdownElements.Visible) and not Library:Hovering({Items.DropdownElements, Items.Dropdown}) then
                         Cfg.SetVisible(false)
@@ -4619,7 +4619,7 @@
             end)
 
             Library:Connection(InputService.InputBegan, function(input, game_event) 
-                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
                     if (Items.Dropdown.Items.DropdownElements.Visible and Items.ModeHolder.Visible) and not (Library:Hovering(Items.Dropdown.Items.DropdownElements) or Library:Hovering(Items.ModeHolder)) then 
                         Items.Dropdown.SetVisible(false)
                         Items.Dropdown.Visible = false
