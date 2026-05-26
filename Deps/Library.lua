@@ -3125,6 +3125,7 @@
                 
                 -- Other
                 Items = {};
+                _order = 0;
             };
             
             local Items = Cfg.Items; do
@@ -3303,21 +3304,33 @@
                 Folding = properties.Folding or false;
                 Collapsable = properties.Collapsing or true;
 
+                _parent = self;  -- link to parent section/toggle for counter walk-up
+                _order = 0;      -- sub-element counter for children of this toggle
+
                 Items = {};
             }
 
             local Items = Cfg.Items; do 
+                local _elemParent = self.Items.GroupElements or self.Items.Elements
+                -- Walk up to find the correct _order counter:
+                -- sub-toggles (Folding) own the counter for their children via self._order
+                -- sections own the counter for their top-level children via self._order
+                local _section = self
+                _section._order = (_section._order or 0) + 1
+                local _myOrder = _section._order
+
                 Items.Object = Library:Create( "TextButton" , {
                     FontFace = Library.Font;
                     TextColor3 = rgb(0, 0, 0);
                     BorderColor3 = rgb(0, 0, 0);
                     Text = "";
-                    Parent = self.Items.GroupElements or self.Items.Elements;
+                    Parent = _elemParent;
                     BackgroundTransparency = 1;
                     Name = "\0";
                     Size = dim2(1, 0, 0, 11);
                     BorderSizePixel = 0;
                     TextSize = 14;
+                    LayoutOrder = _myOrder * 2;
                     BackgroundColor3 = rgb(255, 255, 255)
                 });
 
@@ -3413,11 +3426,11 @@
                     --          
                     
                     -- Elements
-                        Items.Object.LayoutOrder = #(self.Items.GroupElements or self.Items.Elements):GetChildren()
+                        Items.Object.LayoutOrder = _myOrder * 2
                         Items.Group = Library:Create( "Frame" , {
-                            LayoutOrder = Items.Object.LayoutOrder + 0.5;
+                            LayoutOrder = _myOrder * 2 + 1;
                             BorderColor3 = rgb(0, 0, 0);
-                            Parent = self.Items.GroupElements or self.Items.Elements;
+                            Parent = _elemParent;
                             Name = "\0";
                             Visible = false;
                             BackgroundTransparency = 1;
@@ -3527,6 +3540,8 @@
             } 
 
             local Items = Cfg.Items; do
+                local _section = self
+                _section._order = (_section._order or 0) + 1
                 Items.Slider = Library:Create( "TextButton" , {
                     FontFace = Library.Font;
                     TextColor3 = rgb(0, 0, 0);
@@ -3538,6 +3553,7 @@
                     Size = dim2(1, 0, 0, 25);
                     BorderSizePixel = 0;
                     TextSize = 14;
+                    LayoutOrder = _section._order * 2;
                     BackgroundColor3 = rgb(255, 255, 255)
                 });
                 
@@ -3754,6 +3770,8 @@
             Flags[Cfg.Flag] = Cfg.Default
             
             local Items = Cfg.Items; do 
+                local _section = self
+                _section._order = (_section._order or 0) + 1
                 -- Element
                     Items.Dropdown = Library:Create( "TextButton" , {
                         FontFace = Library.Font;
@@ -3766,6 +3784,7 @@
                         Size = dim2(1, 0, 0, 32);
                         BorderSizePixel = 0;
                         TextSize = 14;
+                        LayoutOrder = _section._order * 2;
                         BackgroundColor3 = rgb(255, 255, 255)
                     });
 
@@ -4096,8 +4115,10 @@
             }
 
             local Items = Cfg.Items; do 
+                local _section = self
+                _section._order = (_section._order or 0) + 1
                 Items.Label = Library:Create( "TextButton" , {
-                    LayoutOrder = 1;
+                    LayoutOrder = _section._order * 2;
                     FontFace = Library.Font;
                     TextColor3 = rgb(0, 0, 0);
                     BorderColor3 = rgb(0, 0, 0);
@@ -4196,6 +4217,8 @@
             Flags[Cfg.Flag] = Cfg.default
 
             local Items = Cfg.Items; do 
+                local _section = self
+                _section._order = (_section._order or 0) + 1
                 Items.Textbox = Library:Create( "TextButton" , {
                     FontFace = Library.Font;
                     TextColor3 = rgb(0, 0, 0);
@@ -4207,6 +4230,7 @@
                     Size = dim2(1, 0, 0, 32);
                     BorderSizePixel = 0;
                     TextSize = 14;
+                    LayoutOrder = _section._order * 2;
                     BackgroundColor3 = rgb(255, 255, 255)
                 });
                 
@@ -4674,6 +4698,8 @@
             }
             
             local Items = Cfg.Items; do 
+                local _section = self
+                _section._order = (_section._order or 0) + 1
                 Items.Button = Library:Create( "TextButton" , {
                     FontFace = Library.Font;
                     TextColor3 = rgb(0, 0, 0);
@@ -4686,6 +4712,7 @@
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.Y;
                     TextSize = 14;
+                    LayoutOrder = _section._order * 2;
                     BackgroundColor3 = rgb(255, 255, 255)
                 });
                 
