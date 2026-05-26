@@ -3413,10 +3413,11 @@
                     --          
                     
                     -- Elements
+                        Items.Object.LayoutOrder = #(self.Items.GroupElements or self.Items.Elements):GetChildren()
                         Items.Group = Library:Create( "Frame" , {
-                            LayoutOrder = 2;
+                            LayoutOrder = Items.Object.LayoutOrder + 0.5;
                             BorderColor3 = rgb(0, 0, 0);
-                            Parent = Library.Other;
+                            Parent = self.Items.GroupElements or self.Items.Elements;
                             Name = "\0";
                             Visible = false;
                             BackgroundTransparency = 1;
@@ -3488,7 +3489,6 @@
                 
                 if Cfg.Folding then
                     Items.Group.Visible = bool
-                    Items.Group.Parent = bool and (self.Items.GroupElements or self.Items.Elements) or Library.Other
                     Items.Fade.BackgroundTransparency = 0
                     
                     Library:Tween(Items.Arrow or Items.Arrow, {Rotation = bool and 180 or 0})
