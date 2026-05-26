@@ -2209,20 +2209,12 @@
             self.Items.Right:Destroy()
 
             local Items = Cfg.Items; do 
-                Library:Create( "UIListLayout" , {
-                    FillDirection = Enum.FillDirection.Horizontal;
-                    HorizontalFlex = Enum.UIFlexAlignment.Fill;
-                    Parent = self.Items.Page;
-                    Padding = dim(0, 4);
-                    SortOrder = Enum.SortOrder.LayoutOrder;
-                });
-                
                 Items.Column = Library:Create( "Frame" , {
                     Parent = self.Items.Page;
                     BackgroundTransparency = 1;
                     Name = "\0";
                     BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(0, 100, 0, 100);
+                    Size = dim2(0, 100, 1, 0);
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(255, 255, 255)
                 });
