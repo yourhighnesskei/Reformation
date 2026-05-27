@@ -4097,7 +4097,6 @@
 
             Library:Connection(InputService.InputBegan, function(input, game_event)
                 if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
-                    print("clicked")
                     if (Items.DropdownElements.Visible) and not Library:Hovering({Items.DropdownElements, Items.Dropdown}) then
                         Cfg.SetVisible(false)
                         Cfg.Open = false
