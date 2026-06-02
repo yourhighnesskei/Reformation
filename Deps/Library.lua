@@ -3501,12 +3501,10 @@
                 end 
             end;
             
-            function Cfg.Set(bool)
-                Cfg.Callback(bool)
+            function Cfg.Set(bool, skipCallback)
+                Flags[Cfg.Flag] = bool
 
                 Library:Tween(Items.Accent, {BackgroundColor3 = bool and themes.preset.accent or themes.preset.inline})
-                
-                Flags[Cfg.Flag] = bool
                 
                 if Cfg.Folding then
                     Items.Group.Visible = bool
@@ -3514,7 +3512,11 @@
                     
                     Library:Tween(Items.Arrow or Items.Arrow, {Rotation = bool and 180 or 0})
                     Library:Tween(Items.Fade, {BackgroundTransparency = 1})
-                end 
+                end
+
+                if not skipCallback then
+                    Cfg.Callback(bool)
+                end
             end 
             
             Items.Object.MouseButton1Click:Connect(function()
@@ -3523,13 +3525,19 @@
             end)
 
             if not Cfg.Folding then
-                Cfg.Set(Cfg.Enabled)
+                Cfg.Set(Cfg.Enabled, true)
+                task.defer(function()
+                    Cfg.Callback(Cfg.Enabled)
+                end)
             else
                 Flags[Cfg.Flag] = Cfg.Enabled
                 if Cfg.Folding then
                     Items.Group.Visible = Cfg.Enabled
                     Library:Tween(Items.Arrow, {Rotation = Cfg.Enabled and 180 or 0})
                 end
+                task.defer(function()
+                    Cfg.Callback(Cfg.Enabled)
+                end)
             end
 
             ConfigFlags[Cfg.Flag] = Cfg.Set
