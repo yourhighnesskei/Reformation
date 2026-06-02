@@ -3522,7 +3522,15 @@
                 Cfg.Set(Cfg.Enabled)
             end)
 
-            Cfg.Set(Cfg.Enabled)
+            if not Cfg.Folding then
+                Cfg.Set(Cfg.Enabled)
+            else
+                Flags[Cfg.Flag] = Cfg.Enabled
+                if Cfg.Folding then
+                    Items.Group.Visible = Cfg.Enabled
+                    Library:Tween(Items.Arrow, {Rotation = Cfg.Enabled and 180 or 0})
+                end
+            end
 
             ConfigFlags[Cfg.Flag] = Cfg.Set
 
