@@ -4197,6 +4197,8 @@
                 Items = {};
             }
 
+            Flags[Cfg.Flag] = {Color = Cfg.Color, Transparency = Cfg.Alpha}
+
             local Picker = self:Keypicker(Cfg)
 
             local Items = Picker.Items; do
