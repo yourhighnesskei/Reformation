@@ -393,7 +393,7 @@
                 Flag = properties.Flag or properties.Name or "Colorpicker",
                 Callback = properties.Callback or function() end,
 
-                Color = properties.Color or color(1, 1, 1), -- Default to white color if not provided
+                Color = properties.Default or properties.Color or color(1, 1, 1), -- Default to white color if not provided
                 Alpha = properties.Alpha or properties.Transparency or 0,
                 
                 Mode = properties.Mode or "Keypicker"; -- Animation
@@ -4188,7 +4188,7 @@
                 Flag = properties.Flag or properties.Name or "Colorpicker",
                 Callback = properties.Callback or function() end,
 
-                Color = properties.Color or color(1, 1, 1), -- Default to white color if not provided
+                Color = properties.Default or properties.Color or color(1, 1, 1), -- Default to white color if not provided
                 Alpha = properties.Alpha or properties.Transparency or 0,
                 
                 -- Other
