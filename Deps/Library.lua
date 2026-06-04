@@ -35,7 +35,7 @@
             inline = rgb(50, 50, 50);
             gradient = rgb(40, 40, 40);
             outline = rgb(39, 35, 47);
-            accent = rgb(125, 152, 175);
+            accent = rgb(66, 110, 135);
             background = rgb(29, 27, 38);
             text_color = rgb(239, 239, 239);
             text_outline = rgb(0, 0, 0);
@@ -3922,7 +3922,8 @@
                         Position = dim2(0.30000001192092896, 0, 0.5, 0);
                         BorderColor3 = rgb(0, 0, 0);
                         BorderSizePixel = 0;
-                        AutomaticSize = Enum.AutomaticSize.Y;
+                        AutomaticSize = Enum.AutomaticSize.None;
+                        ClipsDescendants = true;
                         BackgroundColor3 = themes.preset.outline
                     });	Library:Themify(Items.DropdownElements, "outline", "BackgroundColor3")
                     
@@ -3936,25 +3937,28 @@
                         BackgroundColor3 = themes.preset.inline
                     });	Library:Themify(Items.Inline, "inline", "BackgroundColor3")
                     
-                    Items.DropdownHolder = Library:Create( "Frame" , {
+                    Items.DropdownHolder = Library:Create( "ScrollingFrame" , {
                         Parent = Items.Inline;
                         Name = "\0";
                         Position = dim2(0, 1, 0, 1);
                         BorderColor3 = rgb(0, 0, 0);
                         Size = dim2(1, -2, 1, -2);
                         BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(255, 255, 255)
+                        BackgroundColor3 = rgb(255, 255, 255);
+                        AutomaticCanvasSize = Enum.AutomaticSize.Y;
+                        CanvasSize = dim2(0, 0, 0, 0);
+                        ScrollBarThickness = 4;
+                        ScrollBarImageColor3 = rgb(85, 170, 255);
+                        BottomImage = "rbxassetid://7783554086";
+                        MidImage = "rbxassetid://7783554086";
+                        TopImage = "rbxassetid://7783554086";
+                        ClipsDescendants = true;
                     });
-                    
-                    local gradient = Library:Create( "UIGradient" , {
-                        Rotation = 90;
-                        Parent = Items.DropdownHolder;
-                        Color = rgbseq{rgbkey(0, themes.preset.inline), rgbkey(1, themes.preset.gradient)}
-                    }); Library:SaveGradient(gradient, "Selected");
                     
                     Library:Create( "UIListLayout" , {
                         Parent = Items.DropdownHolder;
-                        SortOrder = Enum.SortOrder.LayoutOrder
+                        SortOrder = Enum.SortOrder.LayoutOrder;
+                        Padding = UDim.new(0, 1);
                     });                
                 -- 
             end 
@@ -3968,11 +3972,11 @@
                     Parent = Items.DropdownHolder;
                     Name = "\0";
                     ZIndex = 999;
-                    Size = dim2(1, 0, 0, 0);
+                    Size = dim2(1, 0, 0, 18);
                     BackgroundTransparency = 1;
                     TextXAlignment = Enum.TextXAlignment.Left;
                     BorderSizePixel = 0;
-                    AutomaticSize = Enum.AutomaticSize.XY;
+                    AutomaticSize = Enum.AutomaticSize.None;
                     TextSize = 12;
                     BackgroundColor3 = rgb(255, 255, 255)
                 });
@@ -3983,8 +3987,8 @@
                 });
                 
                 Library:Create( "UIPadding" , {
-                    PaddingTop = dim(0, 3);
-                    PaddingBottom = dim(0, 3);
+                    PaddingTop = dim(0, 2);
+                    PaddingBottom = dim(0, 2);
                     Parent = Button;
                     PaddingRight = dim(0, 3);
                     PaddingLeft = dim(0, 3)
@@ -4000,8 +4004,13 @@
                     Library:CloseElement()
                 end
 
-                Items.DropdownElements.Position = dim2(0, Items.Outline.AbsolutePosition.X, 0, Items.Outline.AbsolutePosition.Y + 80)
-				Items.DropdownElements.Size = dim_offset(Items.Outline.AbsoluteSize.X + 1, 0)
+                local optionCount = #Cfg.OptionInstances
+                local maxVisible = math.min(optionCount, 6)
+                local popupHeight = maxVisible * 18 + (maxVisible > 1 and (maxVisible - 1) or 0) + 4
+
+                Items.DropdownElements.Position = dim2(0, Items.Outline.AbsolutePosition.X, 0, Items.Outline.AbsolutePosition.Y + Items.Outline.AbsoluteSize.Y + 2)
+				Items.DropdownElements.Size = dim_offset(Items.Outline.AbsoluteSize.X + 1, popupHeight)
+                Items.DropdownHolder.Size = dim2(1, -2, 1, -2)
                 Items.DropdownElements.Visible = bool 
                 Items.DropdownElements.Parent = bool and Library.Items or Library.Other; 
 
@@ -4298,10 +4307,10 @@
                 Items.Input = Library:Create( "TextBox" , {
                     FontFace = Library.Font;
                     ClearTextOnFocus = false;
-                    Active = false;
-                    Selectable = false;
+                    Active = true;
+                    Selectable = true;
                     PlaceholderColor3 = themes.preset.text_color;
-                    PlaceholderText = "Hi!";
+                    PlaceholderText = Cfg.PlaceHolder;
                     TextSize = 12;
                     TextTruncate = Enum.TextTruncate.AtEnd;
                     Size = dim2(1, 0, 1, 0);
