@@ -35,7 +35,7 @@
             inline = rgb(50, 50, 50);
             gradient = rgb(40, 40, 40);
             outline = rgb(39, 35, 47);
-            accent = rgb(66, 110, 135);
+            accent = rgb(125, 152, 175);
             background = rgb(29, 27, 38);
             text_color = rgb(239, 239, 239);
             text_outline = rgb(0, 0, 0);
