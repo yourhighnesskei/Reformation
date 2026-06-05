@@ -375,8 +375,8 @@
             
             local List = {}
             
-            for _,file in listfiles(Library.Directory .. "/configs") do
-                local Name = file:gsub(Library.Directory .. "/configs\\", ""):gsub(".cfg", ""):gsub(Library.Directory .. "\\configs\\", "")
+            for _,file in listfiles(Library.Directory .. "/Configs") do
+                local Name = file:gsub(Library.Directory .. "/Configs\\", ""):gsub(".cfg", ""):gsub(Library.Directory .. "\\Configs\\", "")
                 List[#List + 1] = Name
             end
 
@@ -4142,6 +4142,10 @@
             
             Cfg.RefreshOptions(Cfg.Options)
             Cfg.Set(Cfg.Default)
+
+            if Cfg.Flag == "Configuration List" then
+                ConfigHolder = Cfg
+            end
                 
             return setmetatable(Cfg, Library)
         end
