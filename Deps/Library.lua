@@ -35,7 +35,7 @@
             inline = rgb(50, 50, 50);
             gradient = rgb(40, 40, 40);
             outline = rgb(39, 35, 47);
-            accent = rgb(66, 110, 135);
+            accent = rgb(125, 152, 175);
             background = rgb(29, 27, 38);
             text_color = rgb(239, 239, 239);
             text_outline = rgb(0, 0, 0);
@@ -399,7 +399,7 @@
                 Callback = properties.Callback or function() end,
 
                 Color = properties.Default or properties.Color or color(1, 1, 1), -- Default to white color if not provided
-                Alpha = properties.Alpha or properties.Transparency or 0,
+                Alpha = properties.Alpha or properties.Transparency or 0.5,
                 
                 Mode = properties.Mode or "Keypicker"; -- Animation
 
@@ -4231,7 +4231,7 @@
                 Callback = properties.Callback or function() end,
 
                 Color = properties.Default or properties.Color or color(1, 1, 1), -- Default to white color if not provided
-                Alpha = properties.Alpha or properties.Transparency or 0,
+                Alpha = properties.Alpha or properties.Transparency or 0.5,
                 
                 -- Other
                 Open = false;
