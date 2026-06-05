@@ -3953,6 +3953,8 @@
                         MidImage = "rbxassetid://7783554086";
                         TopImage = "rbxassetid://7783554086";
                         ClipsDescendants = true;
+                        ScrollingEnabled = true;
+                        Active = true;
                     });
                     
                     Library:Create( "UIListLayout" , {
@@ -4006,20 +4008,24 @@
 
                 local optionCount = #Cfg.OptionInstances
                 local maxVisible = math.min(optionCount, 6)
-                local popupHeight = maxVisible * 18 + (maxVisible > 1 and (maxVisible - 1) or 0) + 4
+                local popupHeight = maxVisible * 20 + 4
 
-                Items.DropdownElements.Position = dim2(0, Items.Outline.AbsolutePosition.X, 0, Items.Outline.AbsolutePosition.Y + Items.Outline.AbsoluteSize.Y + 2)
-				Items.DropdownElements.Size = dim_offset(Items.Outline.AbsoluteSize.X + 1, popupHeight)
+                local guiInset = game:GetService("GuiService"):GetGuiInset()
+                local absPos = Items.Outline.AbsolutePosition
+                local absSize = Items.Outline.AbsoluteSize
+                local posX = absPos.X
+                local posY = absPos.Y + absSize.Y + 2 - guiInset.Y
+
+                Items.DropdownElements.Position = dim2(0, posX, 0, posY)
+                Items.DropdownElements.Size = dim_offset(absSize.X + 2, popupHeight)
                 Items.DropdownHolder.Size = dim2(1, -2, 1, -2)
-                Items.DropdownElements.Visible = bool 
-                Items.DropdownElements.Parent = bool and Library.Items or Library.Other; 
+                Items.DropdownElements.Visible = bool
+                Items.DropdownElements.Parent = bool and Library.Items or Library.Other
 
                 if not Cfg.Multi then 
                     Items.Icon.Text = bool and "+" or "-"
                 end
 
-                -- Cfg.Tween(bool)
-                
                 Library.OpenElement = Cfg
             end
             
@@ -4054,7 +4060,15 @@
                 for _,option in options do
                     local Button = Cfg.RenderOption(option)
                     
-                    Button.MouseButton1Down:Connect(function()
+                    local _scrolling = false
+                    Items.DropdownHolder.InputChanged:Connect(function(inp)
+                        if inp.UserInputType == Enum.UserInputType.MouseWheel then
+                            _scrolling = true
+                            task.delay(0.1, function() _scrolling = false end)
+                        end
+                    end)
+                    Button.MouseButton1Click:Connect(function()
+                        if _scrolling then return end
                         if Cfg.Multi then 
                             local Selected = table.find(Cfg.MultiItems, Button.Text)
                             
@@ -4064,7 +4078,7 @@
                                 table.insert(Cfg.MultiItems, Button.Text)
                             end
                             
-                            Cfg.Set(Cfg.MultiItems) 				
+                            Cfg.Set(Cfg.MultiItems)
                         else 
                             Cfg.SetVisible(false)
                             Cfg.Open = false
