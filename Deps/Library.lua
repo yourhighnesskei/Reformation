@@ -4010,14 +4010,8 @@
                 local maxVisible = math.min(optionCount, 6)
                 local popupHeight = maxVisible * 20 + 4
 
-                local guiInset = game:GetService("GuiService"):GetGuiInset()
-                local absPos = Items.Outline.AbsolutePosition
-                local absSize = Items.Outline.AbsoluteSize
-                local posX = absPos.X
-                local posY = absPos.Y + absSize.Y + 2 - guiInset.Y
-
-                Items.DropdownElements.Position = dim2(0, posX, 0, posY)
-                Items.DropdownElements.Size = dim_offset(absSize.X + 2, popupHeight)
+                Items.DropdownElements.Position = dim2(0, Items.Outline.AbsolutePosition.X, 0, Items.Outline.AbsolutePosition.Y + 80)
+                Items.DropdownElements.Size = dim_offset(Items.Outline.AbsoluteSize.X + 1, popupHeight)
                 Items.DropdownHolder.Size = dim2(1, -2, 1, -2)
                 Items.DropdownElements.Visible = bool
                 Items.DropdownElements.Parent = bool and Library.Items or Library.Other
