@@ -3944,7 +3944,7 @@
                         BorderColor3 = rgb(0, 0, 0);
                         Size = dim2(1, -2, 1, -2);
                         BorderSizePixel = 0;
-                        BackgroundColor3 = rgb(255, 255, 255);
+                        BackgroundTransparency = 1;
                         AutomaticCanvasSize = Enum.AutomaticSize.Y;
                         CanvasSize = dim2(0, 0, 0, 0);
                         ScrollBarThickness = 4;
