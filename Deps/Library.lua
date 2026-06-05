@@ -375,9 +375,14 @@
             
             local List = {}
             
-            for _,file in listfiles(Library.Directory .. "/Configs") do
-                local Name = file:gsub(Library.Directory .. "/Configs\\", ""):gsub(".cfg", ""):gsub(Library.Directory .. "\\Configs\\", "")
-                List[#List + 1] = Name
+            local configDir = Library.Directory .. "/Configs"
+            if not isfolder(configDir) then makefolder(configDir) end
+            
+            for _,file in listfiles(configDir) do
+                if file:match("%.cfg$") then
+                    local Name = (file:match("[/\\]([^/\\]+)$") or file):gsub("%.cfg$", "")
+                    List[#List + 1] = Name
+                end
             end
 
             for _,v in List do 
