@@ -19,7 +19,9 @@
             "/Configs",
             "/Addons",
             "/Assets",
-            "/Hitsounds"
+            "/Hitsounds",
+            "/Configs/Hood Games",
+            "/Configs/Prison Life"
         },
         Flags = {},
         ConfigFlags = {},
