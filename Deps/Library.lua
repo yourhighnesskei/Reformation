@@ -4841,11 +4841,10 @@
             local offset = 50
             
             for i, v in Notifications.Notifs do
-                local Position = vec2(20, offset)
-                Library:Tween(v, {Position = dim_offset(Position.X, Position.Y)})
+                Library:Tween(v, {Position = dim2(0.5, 0, 0, offset)})
                 offset += (v.AbsoluteSize.Y + 10)
             end
-
+        
             return offset
         end
         
@@ -4853,7 +4852,7 @@
             local fading = is_fading and 1 or 0 
             
             Library:Tween(path, {BackgroundTransparency = fading})
-
+        
             for _, instance in path:GetDescendants() do 
                 if not instance:IsA("GuiObject") then 
                     if instance:IsA("UIStroke") then
@@ -4879,14 +4878,14 @@
                 Items = {};
                 outline;
             }
-
+        
             local Items = Cfg.Items; do 
                 Items.Outline = Library:Create( "Frame" , {
                     Parent = Library.Items;
                     Size = dim2(0, 0, 0, 18);
                     Name = "\0";
-                    AnchorPoint = vec2(1, 0);
-                    Position = dim2(0, 7, 0, 46);
+                    AnchorPoint = vec2(0.5, 0);
+                    Position = dim2(0.5, 0, 0, 46);
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
@@ -4944,7 +4943,7 @@
                     BorderSizePixel = 0;
                     ZIndex = 100;
                     BackgroundColor3 = themes.preset.accent
-                });	Library:Themify(Items.AccentLine, "accent", "BackgroundColor3")
+                }); Library:Themify(Items.AccentLine, "accent", "BackgroundColor3")
                 
                 Items.Accent = Library:Create( "Frame" , {
                     Parent = Items.Outline;
@@ -4955,27 +4954,24 @@
                     Size = dim2(0, 1, 1, -1);
                     BorderSizePixel = 0;
                     BackgroundColor3 = themes.preset.accent
-                });	Library:Themify(Items.Accent, "accent", "BackgroundColor3")                    
+                }); Library:Themify(Items.Accent, "accent", "BackgroundColor3")                    
             end 
             
             local index = #Notifications.Notifs + 1
             Notifications.Notifs[index] = Items.Outline
-
-            -- Notifications:FadeNotifs(Items.Outline, false)
-            
+        
             local offset = Notifications:RefreshNotifications()
-
-            Items.Outline.Position = dim_offset(20, offset)
-
-            Library:Tween(Items.Outline, {AnchorPoint = vec2(0, 0)})
+        
+            Items.Outline.Position = dim2(0.5, 0, 0, offset)
+        
+            Library:Tween(Items.Outline, {AnchorPoint = vec2(0.5, 0)})
             Library:Tween(Items.AccentLine, {Size = dim2(0, -2, 0, 1)}, TweenInfo.new(Cfg.Lifetime, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut, 0, false, 0))
-
-            print(Items.AccentLine.BackgroundTransparency)
+        
             task.spawn(function()
                 task.wait(Cfg.Lifetime)
                 Notifications.Notifs[index] = nil
                 Notifications:FadeNotifs(Items.Outline, true)
-                Library:Tween(Items.Outline, {AnchorPoint = vec2(1, 0)})
+                Library:Tween(Items.Outline, {AnchorPoint = vec2(0.5, 0)})
                 task.wait(1)
                 Items.Outline:Destroy() 
             end)
