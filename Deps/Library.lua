@@ -4844,7 +4844,7 @@
                     local sizeX = v.AbsoluteSize.X
                     local screenY = workspace.CurrentCamera.ViewportSize.Y
                     local screenX = workspace.CurrentCamera.ViewportSize.X
-                    local pos = NewVector2(screenX / 2 - sizeX / 2, screenY * 0.78 - ((i - 1) * 25))
+                    local pos = Vector2.new(screenX / 2 - sizeX / 2, screenY * 0.78 - ((i - 1) * 25))
                     Library:Tween(v, {Position = dim_offset(pos.X, pos.Y)})
                 end)
             end
