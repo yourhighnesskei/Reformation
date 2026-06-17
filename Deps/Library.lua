@@ -4837,15 +4837,15 @@
     
     -- Notification Library
         -- IGNORE: , TweenInfo.new(1, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out)
-        function Notifications:RefreshNotifications() 
-            local offset = 50
-            
+        function Notifications:RefreshNotifications(position)
             for i, v in Notifications.Notifs do
-                Library:Tween(v, {Position = dim2(0.5, 0, 0, offset)})
-                offset += (v.AbsoluteSize.Y + 10)
+                task.defer(function()
+                    if not v then return end
+                    local sizeX = v.AbsoluteSize.X
+                    local pos = NewVector2(Library.Items.AbsoluteSize.X / 2 - sizeX / 2, Library.Items.AbsoluteSize.Y * 0.78 - (i * 25))
+                    Library:Tween(v, {Position = dim_offset(pos.X, pos.Y)})
+                end)
             end
-        
-            return offset
         end
         
         function Notifications:FadeNotifs(path, is_fading)
@@ -4874,7 +4874,7 @@
             local Cfg = {
                 Name = properties.Name or "This is a title!";
                 Lifetime = properties.LifeTime or 3;
-                
+        
                 Items = {};
                 outline;
             }
@@ -4884,8 +4884,8 @@
                     Parent = Library.Items;
                     Size = dim2(0, 0, 0, 18);
                     Name = "\0";
-                    AnchorPoint = vec2(0.5, 0);
-                    Position = dim2(0.5, 0, 0, 46);
+                    AnchorPoint = vec2(0, 0);
+                    Position = dim2(0, 0, 0.78, 0);
                     BorderColor3 = rgb(0, 0, 0);
                     BorderSizePixel = 0;
                     AutomaticSize = Enum.AutomaticSize.XY;
@@ -4960,20 +4960,24 @@
             local index = #Notifications.Notifs + 1
             Notifications.Notifs[index] = Items.Outline
         
-            local offset = Notifications:RefreshNotifications()
+            task.defer(function()
+                local sizeX = Items.Outline.AbsoluteSize.X
+                Items.Outline.Position = dim_offset(Library.Items.AbsoluteSize.X / 2 - sizeX / 2, Library.Items.AbsoluteSize.Y * 0.78)
+                Notifications:RefreshNotifications()
+            end)
         
-            Items.Outline.Position = dim2(0.5, 0, 0, offset)
-        
-            Library:Tween(Items.Outline, {AnchorPoint = vec2(0.5, 0)})
+            Items.Outline.AnchorPoint = vec2(1, 0)
+            Library:Tween(Items.Outline, {AnchorPoint = vec2(0, 0)})
             Library:Tween(Items.AccentLine, {Size = dim2(0, -2, 0, 1)}, TweenInfo.new(Cfg.Lifetime, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut, 0, false, 0))
         
             task.spawn(function()
                 task.wait(Cfg.Lifetime)
                 Notifications.Notifs[index] = nil
                 Notifications:FadeNotifs(Items.Outline, true)
-                Library:Tween(Items.Outline, {AnchorPoint = vec2(0.5, 0)})
+                Library:Tween(Items.Outline, {AnchorPoint = vec2(1, 0)})
                 task.wait(1)
                 Items.Outline:Destroy() 
+                Notifications:RefreshNotifications()
             end)
         end
     --
