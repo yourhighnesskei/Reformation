@@ -4837,12 +4837,14 @@
     
     -- Notification Library
         -- IGNORE: , TweenInfo.new(1, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out)
-        function Notifications:RefreshNotifications(position)
+        function Notifications:RefreshNotifications()
             for i, v in Notifications.Notifs do
                 task.defer(function()
                     if not v then return end
                     local sizeX = v.AbsoluteSize.X
-                    local pos = NewVector2(Library.Items.AbsoluteSize.X / 2 - sizeX / 2, Library.Items.AbsoluteSize.Y * 0.78 - (i * 25))
+                    local screenY = workspace.CurrentCamera.ViewportSize.Y
+                    local screenX = workspace.CurrentCamera.ViewportSize.X
+                    local pos = NewVector2(screenX / 2 - sizeX / 2, screenY * 0.78 - (i * 25))
                     Library:Tween(v, {Position = dim_offset(pos.X, pos.Y)})
                 end)
             end
@@ -4962,7 +4964,9 @@
         
             task.defer(function()
                 local sizeX = Items.Outline.AbsoluteSize.X
-                Items.Outline.Position = dim_offset(Library.Items.AbsoluteSize.X / 2 - sizeX / 2, Library.Items.AbsoluteSize.Y * 0.78)
+                local screenY = workspace.CurrentCamera.ViewportSize.Y
+                local screenX = workspace.CurrentCamera.ViewportSize.X
+                Items.Outline.Position = dim_offset(screenX / 2 - sizeX / 2, screenY * 0.78)
                 Notifications:RefreshNotifications()
             end)
         
