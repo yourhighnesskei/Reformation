@@ -4838,13 +4838,13 @@
     -- Notification Library
         -- IGNORE: , TweenInfo.new(1, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out)
         function Notifications:RefreshNotifications()
-            for i, v in Notifications.Notifs do
+            for i, v in ipairs(Notifications.Notifs) do
                 task.defer(function()
                     if not v then return end
                     local sizeX = v.AbsoluteSize.X
                     local screenY = workspace.CurrentCamera.ViewportSize.Y
                     local screenX = workspace.CurrentCamera.ViewportSize.X
-                    local pos = NewVector2(screenX / 2 - sizeX / 2, screenY * 0.78 - (i * 25))
+                    local pos = NewVector2(screenX / 2 - sizeX / 2, screenY * 0.78 - ((i - 1) * 25))
                     Library:Tween(v, {Position = dim_offset(pos.X, pos.Y)})
                 end)
             end
@@ -4959,24 +4959,18 @@
                 }); Library:Themify(Items.Accent, "accent", "BackgroundColor3")                    
             end 
             
-            local index = #Notifications.Notifs + 1
-            Notifications.Notifs[index] = Items.Outline
-        
-            task.defer(function()
-                local sizeX = Items.Outline.AbsoluteSize.X
-                local screenY = workspace.CurrentCamera.ViewportSize.Y
-                local screenX = workspace.CurrentCamera.ViewportSize.X
-                Items.Outline.Position = dim_offset(screenX / 2 - sizeX / 2, screenY * 0.78)
-                Notifications:RefreshNotifications()
-            end)
+            table.insert(Notifications.Notifs, Items.Outline)
         
             Items.Outline.AnchorPoint = vec2(1, 0)
             Library:Tween(Items.Outline, {AnchorPoint = vec2(0, 0)})
             Library:Tween(Items.AccentLine, {Size = dim2(0, -2, 0, 1)}, TweenInfo.new(Cfg.Lifetime, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut, 0, false, 0))
         
+            Notifications:RefreshNotifications()
+        
             task.spawn(function()
                 task.wait(Cfg.Lifetime)
-                Notifications.Notifs[index] = nil
+                local idx = table.find(Notifications.Notifs, Items.Outline)
+                if idx then table.remove(Notifications.Notifs, idx) end
                 Notifications:FadeNotifs(Items.Outline, true)
                 Library:Tween(Items.Outline, {AnchorPoint = vec2(1, 0)})
                 task.wait(1)
