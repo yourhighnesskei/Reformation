@@ -4695,13 +4695,15 @@
 
             Library:Connection(InputService.InputBegan, function(input, game_event) 
                 if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
-                    if (Items.Dropdown.Items.DropdownElements.Visible and Items.ModeHolder.Visible) and not (Library:Hovering(Items.Dropdown.Items.DropdownElements) or Library:Hovering(Items.ModeHolder)) then 
-                        Items.Dropdown.SetVisible(false)
-                        Items.Dropdown.Visible = false
+                    if Items.Dropdown and Items.Dropdown.Items and Items.Dropdown.Items.DropdownElements and Items.Dropdown.Items.DropdownElements.Visible and Items.ModeHolder.Visible then
+                        if not (Library:Hovering(Items.Dropdown.Items.DropdownElements) or Library:Hovering(Items.ModeHolder)) then 
+                            Items.Dropdown.SetVisible(false)
+                            Items.Dropdown.Visible = false
 
-                        Cfg.SetVisible(false)
-                        Cfg.Open = false;
-                    end 
+                            Cfg.SetVisible(false)
+                            Cfg.Open = false
+                        end
+                    end
                 end 
                 
                 if not game_event then
@@ -4734,7 +4736,9 @@
             
             Cfg.Set({Mode = Cfg.Mode, Active = Cfg.Active, Key = Cfg.Key})           
             ConfigFlags[Cfg.Flag] = Cfg.Set
-            Items.Dropdown.Set(Cfg.Mode)
+            if Items.Dropdown then
+                Items.Dropdown.Set(Cfg.Mode)
+            end
 
             return setmetatable(Cfg, Library)
         end
@@ -4873,6 +4877,18 @@
         end 
         
         function Notifications:Create(properties)
+            -- Remove oldest notification if exceeds 6
+            if #Notifications.Notifs > 6 then
+                local oldestNotif = Notifications.Notifs[1]
+                if oldestNotif then
+                    Notifications:FadeNotifs(oldestNotif, true)
+                    Library:Tween(oldestNotif, {AnchorPoint = vec2(1, 0)})
+                    task.wait(0.25)
+                    oldestNotif:Destroy()
+                    table.remove(Notifications.Notifs, 1)
+                end
+            end
+        
             local Cfg = {
                 Name = properties.Name or "This is a title!";
                 Lifetime = properties.LifeTime or 3;
