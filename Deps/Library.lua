@@ -4621,7 +4621,7 @@
                     input = input.Name == "Escape" and "NONE" or input
                     
                     Cfg.Key = input or "NONE"	
-                elseif table.find({"Toggle", "Hold", "Always"}, input) then 
+                elseif input and table.find({"Toggle", "Hold", "Always"}, input) then 
                     if input == "Always" then 
                         Cfg.Active = true 
                     end 
@@ -4734,11 +4734,13 @@
                 end
             end)
             
-            Cfg.Set({Mode = Cfg.Mode, Active = Cfg.Active, Key = Cfg.Key})           
             ConfigFlags[Cfg.Flag] = Cfg.Set
+            
             if Items.Dropdown then
                 Items.Dropdown.Set(Cfg.Mode)
             end
+            
+            Cfg.Set({Mode = Cfg.Mode, Active = Cfg.Active, Key = Cfg.Key})
 
             return setmetatable(Cfg, Library)
         end
