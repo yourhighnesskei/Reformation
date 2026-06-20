@@ -4416,6 +4416,8 @@
                 Active = Cfg.Active
             }
 
+            local KeybindCallback = Cfg.Callback
+
             local Items = Cfg.Items; do 
                 -- Component
                     Items.KeybindOutline = Library:Create( "TextButton" , {
@@ -4642,7 +4644,7 @@
                     Cfg.SetMode(Cfg.Mode) 
                 end 
 
-                Cfg.Callback(Cfg.Active)
+                KeybindCallback(Cfg.Active)
 
                 local text = (tostring(Cfg.Key) ~= "Enums" and (Keys[Cfg.Key] or tostring(Cfg.Key):gsub("Enum.", "")) or nil)
                 local __text = text and tostring(text):gsub("KeyCode.", ""):gsub("UserInputType.", "")
