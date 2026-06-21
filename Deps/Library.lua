@@ -3785,7 +3785,7 @@
                 Callback = properties.Callback or function() end;
                 Multi = properties.Multi or false;
                 Scrolling = properties.Scrolling or false;
-
+        
                 -- Ignore these 
                 Open = false;
                 OptionInstances = {};
@@ -3794,9 +3794,9 @@
                 Tweening = false;
                 Ignore = properties.Ignore or false;
             }   
-
-            Cfg.Default = properties.Default or (Cfg.Multi and {Cfg.Items[1]}) or Cfg.Items[1] or "None"
-            Flags[Cfg.Flag] = Cfg.Default
+        
+            Cfg.Default = properties.Default or (Cfg.Multi and {}) or Cfg.Options[1] or "None"
+            Flags[Cfg.Flag] = Cfg.Multi and {} or Cfg.Default
             
             local Items = Cfg.Items; do 
                 local _section = self
@@ -3816,7 +3816,7 @@
                         LayoutOrder = _section._order * 2;
                         BackgroundColor3 = rgb(255, 255, 255)
                     });
-
+        
                     Items.Outline = Library:Create( "TextButton" , {
                         Parent = Items.Dropdown;
                         AutoButtonColor = false;
@@ -3828,7 +3828,7 @@
                         BorderSizePixel = 0;
                         BackgroundColor3 = themes.preset.outline
                     });	Library:Themify(Items.Outline, "outline", "BackgroundColor3")
-
+        
                     Items.Inline = Library:Create( "Frame" , {
                         Parent = Items.Outline;
                         Name = "\0";
@@ -3838,7 +3838,7 @@
                         BorderSizePixel = 0;
                         BackgroundColor3 = themes.preset.inline
                     });	Library:Themify(Items.Inline, "inline", "BackgroundColor3")
-
+        
                     Items.Background = Library:Create( "Frame" , {
                         Parent = Items.Inline;
                         Name = "\0";
@@ -3848,7 +3848,7 @@
                         BorderSizePixel = 0;
                         BackgroundColor3 = rgb(255, 255, 255)
                     });
-
+        
                     Items.InnerText = Library:Create( "TextLabel" , {
                         FontFace = Library.Font;
                         TextColor3 = themes.preset.text_color;
@@ -3864,18 +3864,18 @@
                         TextSize = 12;
                         BackgroundColor3 = rgb(255, 255, 255)
                     });
-
+        
                     Library:Create( "UIStroke" , {
                         Parent = Items.InnerText;
                         LineJoinMode = Enum.LineJoinMode.Miter
                     });
-
+        
                     local gradient = Library:Create( "UIGradient" , {
                         Rotation = 90;
                         Parent = Items.Background;
                         Color = rgbseq{rgbkey(0, themes.preset.inline), rgbkey(1, themes.preset.gradient)}
                     }); Library:SaveGradient(gradient, "Selected");
-
+        
                     Items.Icon = Library:Create( "TextLabel" , {
                         FontFace = Library.Font;
                         TextColor3 = themes.preset.text_color;
@@ -3892,12 +3892,12 @@
                         TextSize = 12;
                         BackgroundColor3 = rgb(255, 255, 255)
                     });
-
+        
                     Library:Create( "UIStroke" , {
                         Parent = Items.Icon;
                         LineJoinMode = Enum.LineJoinMode.Miter
                     });
-
+        
                     Items.Name = Library:Create( "TextLabel" , {
                         FontFace = Library.Font;
                         TextColor3 = themes.preset.text_color;
@@ -3912,7 +3912,7 @@
                         TextSize = 12;
                         BackgroundColor3 = rgb(255, 255, 255)
                     });
-
+        
                     Library:Create( "UIStroke" , {
                         Parent = Items.Name;
                         LineJoinMode = Enum.LineJoinMode.Miter
@@ -3969,7 +3969,7 @@
                     });                
                 -- 
             end 
-
+        
             function Cfg.RenderOption(text)
                 local Button = Library:Create( "TextButton" , {
                     FontFace = Library.Font;
@@ -4000,9 +4000,9 @@
                     PaddingRight = dim(0, 3);
                     PaddingLeft = dim(0, 3)
                 });          
-
+        
                 table.insert(Cfg.OptionInstances, Button)
-
+        
                 return Button
             end
             
@@ -4010,29 +4010,31 @@
                 if Library.OpenElement ~= Cfg then 
                     Library:CloseElement()
                 end
-
+        
                 local optionCount = #Cfg.OptionInstances
                 local maxVisible = math.min(optionCount, 6)
                 local popupHeight = maxVisible * 20 + 4
-
+        
                 Items.DropdownElements.Position = dim2(0, Items.Outline.AbsolutePosition.X, 0, Items.Outline.AbsolutePosition.Y + 80)
                 Items.DropdownElements.Size = dim_offset(Items.Outline.AbsoluteSize.X + 1, popupHeight)
                 Items.DropdownHolder.Size = dim2(1, -2, 1, -2)
                 Items.DropdownElements.Visible = bool
                 Items.DropdownElements.Parent = bool and Library.Items or Library.Other
-
+        
                 if not Cfg.Multi then 
                     Items.Icon.Text = bool and "+" or "-"
                 end
-
+        
                 Library.OpenElement = Cfg
             end
             
             function Cfg.Set(value)
+                if value == nil then return end
+        
                 local Selected = {}
                 local IsTable = type(value) == "table"
-
-                for _,option in Cfg.OptionInstances do 
+        
+                for _, option in Cfg.OptionInstances do 
                     if option.Text == value or (IsTable and table.find(value, option.Text)) then 
                         table.insert(Selected, option.Text)
                         Cfg.MultiItems = Selected
@@ -4042,7 +4044,7 @@
                         option.BackgroundTransparency = 1
                     end
                 end
-
+        
                 Items.InnerText.Text = if IsTable then table.concat(Selected, ", ") else Selected[1] or ""
                 Flags[Cfg.Flag] = if IsTable then Selected else Selected[1]
                 
@@ -4050,13 +4052,13 @@
             end
             
             function Cfg.RefreshOptions(options) 
-                for _,option in Cfg.OptionInstances do 
+                for _, option in Cfg.OptionInstances do 
                     option:Destroy() 
                 end
                 
                 Cfg.OptionInstances = {} 
-
-                for _,option in options do
+        
+                for _, option in options do
                     local Button = Cfg.RenderOption(option)
                     
                     local _scrolling = false
@@ -4087,30 +4089,30 @@
                     end)
                 end
             end
-
+        
             function Cfg.Tween(bool) 
                 if Cfg.Tweening == true then 
                     return 
                 end 
-
+        
                 Cfg.Tweening = true 
-
+        
                 if bool then 
                     Items.DropdownElements.Visible = true
                     Items.DropdownElements.Parent = Library.Items
                 end
-
+        
                 local Children = Items.DropdownElements:GetDescendants()
                 table.insert(Children, Items.DropdownElements)
-
+        
                 local Tween;
                 for _,obj in Children do
                     local Index = Library:GetTransparency(obj)
-
+        
                     if not Index then 
                         continue 
                     end
-
+        
                     if type(Index) == "table" then
                         for _,prop in Index do
                             Tween = Library:Fade(obj, prop, bool, 0.1)
@@ -4119,20 +4121,20 @@
                         Tween = Library:Fade(obj, Index, bool, 0.1)
                     end
                 end
-
+        
                 task.delay(0.09, function() 
                     Cfg.Tweening = false
                     Items.DropdownElements.Visible = bool
                     Items.DropdownElements.Parent = bool and Library.Items or Library.Other
                 end)
             end
-
+        
             Items.Outline.MouseButton1Click:Connect(function()
                 Cfg.Open = not Cfg.Open 
-
+        
                 Cfg.SetVisible(Cfg.Open)
             end)
-
+        
             Library:Connection(InputService.InputBegan, function(input, game_event)
                 if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
                     if (Items.DropdownElements.Visible) and not Library:Hovering({Items.DropdownElements, Items.Dropdown}) then
@@ -4141,13 +4143,13 @@
                     end 
                 end 
             end)
-
-            Flags[Cfg.Flag] = {} 
+        
+            Flags[Cfg.Flag] = Cfg.Multi and {} or Cfg.Default
             ConfigFlags[Cfg.Flag] = Cfg.Set
             
             Cfg.RefreshOptions(Cfg.Options)
             Cfg.Set(Cfg.Default)
-
+        
             if Cfg.Flag == "Configuration List" then
                 ConfigHolder = Cfg
             end
@@ -4416,8 +4418,6 @@
                 Active = Cfg.Active
             }
 
-            local KeybindCallback = Cfg.Callback
-
             local Items = Cfg.Items; do 
                 -- Component
                     Items.KeybindOutline = Library:Create( "TextButton" , {
@@ -4619,8 +4619,19 @@
                     if Cfg.Mode == "Always" then 
                         Cfg.Active = true
                     end
+                elseif tostring(input):find("Enum") then 
+                    input = input.Name == "Escape" and "NONE" or input
+                    
+                    Cfg.Key = input or "NONE"	
+                elseif table.find({"Toggle", "Hold", "Always"}, input) then 
+                    if input == "Always" then 
+                        Cfg.Active = true 
+                    end 
+
+                    Cfg.Mode = input
+                    Cfg.SetMode(Cfg.Mode) 
                 elseif type(input) == "table" then
-                    input.Key = type(input.Key) == "string" and input.Key ~= "NONE" and Library:ConvertEnum(input.Key) or input.Key
+                    input.Key = type(input.Key) == "string" and input.Key ~= "NONE" and Library:ConvertEnum(input.key) or input.Key
                     input.Key = input.Key == Enum.KeyCode.Escape and "NONE" or input.Key
 
                     Cfg.Key = input.Key or "NONE"
@@ -4631,20 +4642,9 @@
                     end
 
                     Cfg.SetMode(Cfg.Mode) 
-                elseif tostring(input):find("Enum") then 
-                    input = input.Name == "Escape" and "NONE" or input
-                    
-                    Cfg.Key = input or "NONE"	
-                elseif input and table.find({"Toggle", "Hold", "Always"}, input) then 
-                    if input == "Always" then 
-                        Cfg.Active = true 
-                    end 
-
-                    Cfg.Mode = input
-                    Cfg.SetMode(Cfg.Mode) 
                 end 
 
-                KeybindCallback(Cfg.Active)
+                Cfg.Callback(Cfg.Active)
 
                 local text = (tostring(Cfg.Key) ~= "Enums" and (Keys[Cfg.Key] or tostring(Cfg.Key):gsub("Enum.", "")) or nil)
                 local __text = text and tostring(text):gsub("KeyCode.", ""):gsub("UserInputType.", "")
@@ -4697,15 +4697,13 @@
 
             Library:Connection(InputService.InputBegan, function(input, game_event) 
                 if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
-                    if Items.Dropdown and Items.Dropdown.Items and Items.Dropdown.Items.DropdownElements and Items.Dropdown.Items.DropdownElements.Visible and Items.ModeHolder.Visible then
-                        if not (Library:Hovering(Items.Dropdown.Items.DropdownElements) or Library:Hovering(Items.ModeHolder)) then 
-                            Items.Dropdown.SetVisible(false)
-                            Items.Dropdown.Visible = false
+                    if (Items.Dropdown.Items.DropdownElements.Visible and Items.ModeHolder.Visible) and not (Library:Hovering(Items.Dropdown.Items.DropdownElements) or Library:Hovering(Items.ModeHolder)) then 
+                        Items.Dropdown.SetVisible(false)
+                        Items.Dropdown.Visible = false
 
-                            Cfg.SetVisible(false)
-                            Cfg.Open = false
-                        end
-                    end
+                        Cfg.SetVisible(false)
+                        Cfg.Open = false;
+                    end 
                 end 
                 
                 if not game_event then
@@ -4736,13 +4734,9 @@
                 end
             end)
             
+            Cfg.Set({Mode = Cfg.Mode, Active = Cfg.Active, Key = Cfg.Key})           
             ConfigFlags[Cfg.Flag] = Cfg.Set
-            
-            if Items.Dropdown then
-                Items.Dropdown.Set(Cfg.Mode)
-            end
-            
-            Cfg.Set({Mode = Cfg.Mode, Active = Cfg.Active, Key = Cfg.Key})
+            Items.Dropdown.Set(Cfg.Mode)
 
             return setmetatable(Cfg, Library)
         end
