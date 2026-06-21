@@ -4619,17 +4619,6 @@
                     if Cfg.Mode == "Always" then 
                         Cfg.Active = true
                     end
-                elseif tostring(input):find("Enum") then 
-                    input = input.Name == "Escape" and "NONE" or input
-                    
-                    Cfg.Key = input or "NONE"	
-                elseif input and table.find({"Toggle", "Hold", "Always"}, input) then 
-                    if input == "Always" then 
-                        Cfg.Active = true 
-                    end 
-
-                    Cfg.Mode = input
-                    Cfg.SetMode(Cfg.Mode) 
                 elseif type(input) == "table" then
                     input.Key = type(input.Key) == "string" and input.Key ~= "NONE" and Library:ConvertEnum(input.key) or input.Key
                     input.Key = input.Key == Enum.KeyCode.Escape and "NONE" or input.Key
@@ -4641,6 +4630,17 @@
                         Cfg.Active = input.Active
                     end
 
+                    Cfg.SetMode(Cfg.Mode) 
+                elseif tostring(input):find("Enum") then 
+                    input = input.Name == "Escape" and "NONE" or input
+                    
+                    Cfg.Key = input or "NONE"	
+                elseif input and table.find({"Toggle", "Hold", "Always"}, input) then 
+                    if input == "Always" then 
+                        Cfg.Active = true 
+                    end 
+
+                    Cfg.Mode = input
                     Cfg.SetMode(Cfg.Mode) 
                 end 
 
