@@ -4620,7 +4620,7 @@
                         Cfg.Active = true
                     end
                 elseif type(input) == "table" then
-                    input.Key = type(input.Key) == "string" and input.Key ~= "NONE" and Library:ConvertEnum(input.key) or input.Key
+                    input.Key = type(input.Key) == "string" and input.Key ~= "NONE" and Library:ConvertEnum(input.Key) or input.Key
                     input.Key = input.Key == Enum.KeyCode.Escape and "NONE" or input.Key
 
                     Cfg.Key = input.Key or "NONE"
