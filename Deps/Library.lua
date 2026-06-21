@@ -3786,7 +3786,6 @@
                 Multi = properties.Multi or false;
                 Scrolling = properties.Scrolling or false;
         
-                -- Ignore these 
                 Open = false;
                 OptionInstances = {};
                 MultiItems = {};
@@ -3827,7 +3826,7 @@
                         Size = dim2(1, 0, 0, 18);
                         BorderSizePixel = 0;
                         BackgroundColor3 = themes.preset.outline
-                    });	Library:Themify(Items.Outline, "outline", "BackgroundColor3")
+                    }); Library:Themify(Items.Outline, "outline", "BackgroundColor3")
         
                     Items.Inline = Library:Create( "Frame" , {
                         Parent = Items.Outline;
@@ -3837,7 +3836,7 @@
                         Size = dim2(1, -2, 1, -2);
                         BorderSizePixel = 0;
                         BackgroundColor3 = themes.preset.inline
-                    });	Library:Themify(Items.Inline, "inline", "BackgroundColor3")
+                    }); Library:Themify(Items.Inline, "inline", "BackgroundColor3")
         
                     Items.Background = Library:Create( "Frame" , {
                         Parent = Items.Inline;
@@ -3930,7 +3929,7 @@
                         AutomaticSize = Enum.AutomaticSize.None;
                         ClipsDescendants = true;
                         BackgroundColor3 = themes.preset.outline
-                    });	Library:Themify(Items.DropdownElements, "outline", "BackgroundColor3")
+                    }); Library:Themify(Items.DropdownElements, "outline", "BackgroundColor3")
                     
                     Items.Inline = Library:Create( "Frame" , {
                         Parent = Items.DropdownElements;
@@ -3940,7 +3939,7 @@
                         Size = dim2(1, -2, 1, -2);
                         BorderSizePixel = 0;
                         BackgroundColor3 = themes.preset.inline
-                    });	Library:Themify(Items.Inline, "inline", "BackgroundColor3")
+                    }); Library:Themify(Items.Inline, "inline", "BackgroundColor3")
                     
                     Items.DropdownHolder = Library:Create( "ScrollingFrame" , {
                         Parent = Items.Inline;
@@ -4034,10 +4033,22 @@
                 local Selected = {}
                 local IsTable = type(value) == "table"
         
+                -- for multi, if empty table passed just clear
+                if IsTable and not next(value) then
+                    Items.InnerText.Text = ""
+                    Flags[Cfg.Flag] = {}
+                    Cfg.MultiItems = {}
+                    for _, option in Cfg.OptionInstances do
+                        option.TextColor3 = rgb(179, 179, 179)
+                        option.BackgroundTransparency = 1
+                    end
+                    Cfg.Callback(Flags[Cfg.Flag])
+                    return
+                end
+        
                 for _, option in Cfg.OptionInstances do 
                     if option.Text == value or (IsTable and table.find(value, option.Text)) then 
                         table.insert(Selected, option.Text)
-                        Cfg.MultiItems = Selected
                         option.TextColor3 = themes.preset.text_color
                     else
                         option.TextColor3 = rgb(179, 179, 179)
@@ -4045,6 +4056,7 @@
                     end
                 end
         
+                Cfg.MultiItems = Selected
                 Items.InnerText.Text = if IsTable then table.concat(Selected, ", ") else Selected[1] or ""
                 Flags[Cfg.Flag] = if IsTable then Selected else Selected[1]
                 
@@ -4131,7 +4143,6 @@
         
             Items.Outline.MouseButton1Click:Connect(function()
                 Cfg.Open = not Cfg.Open 
-        
                 Cfg.SetVisible(Cfg.Open)
             end)
         
