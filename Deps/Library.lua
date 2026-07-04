@@ -1259,7 +1259,7 @@
             local Config = HttpService:JSONDecode(JSON)
             
             for Idx, Value in Config do                
-                if Idx == "config_name_list" then 
+                if Idx == "config_name_list" or Idx == "Configuration List" then 
                     continue 
                 end
 
@@ -2412,7 +2412,7 @@
                     FontFace = Library.Font;
                     TextColor3 = themes.preset.text_color;
                     BorderColor3 = rgb(0, 0, 0);
-                    Text = "Refresh";
+                    Text = "Reset";
                     Parent = Items.Background;
                     Name = "\0";
                     Size = dim2(1, 0, 1, 0);
@@ -2699,6 +2699,19 @@
                 Cfg.Players[player.Name] = SeperateData
             end 
             
+            function Cfg.RemovePlayer(player)
+                local Data = Cfg.Players[player.Name]
+
+                if Data then
+                    Data.Background:Destroy()
+                    Cfg.Players[player.Name] = nil
+
+                    if Cfg.Selected == Data then
+                        Cfg.Selected = nil
+                    end
+                end
+            end
+
             function Cfg.ModifyPriority(Priority, Items)
                 local Path = Items or Cfg.Selected
                 if Path then
@@ -2714,6 +2727,14 @@
             for _,player in Players:GetPlayers() do 
                 Cfg.AddPlayer(player)
             end
+
+            Players.PlayerAdded:Connect(function(player)
+                Cfg.AddPlayer(player)
+            end)
+
+            Players.PlayerRemoving:Connect(function(player)
+                Cfg.RemovePlayer(player)
+            end)
 
             Items.Refresh.MouseButton1Click:Connect(function()
                 for _,player in Players:GetPlayers() do
@@ -4372,6 +4393,7 @@
             end 
             
             function Cfg.Set(text) 
+                text = text or ""
                 Flags[Cfg.Flag] = text
 
                 Items.Input.Text = text
@@ -4849,6 +4871,10 @@
                     Library:Tween(v, {Position = dim_offset(pos.X, pos.Y)})
                 end)
             end
+
+            if #Notifications.Notifs > 6 then
+                Notifications:Dismiss(Notifications.Notifs[1])
+            end
         end
         
         function Notifications:FadeNotifs(path, is_fading)
@@ -4873,19 +4899,26 @@
             end
         end 
         
-        function Notifications:Create(properties)
-            -- Remove oldest notification if exceeds 6
-            if #Notifications.Notifs > 6 then
-                local oldestNotif = Notifications.Notifs[1]
-                if oldestNotif then
-                    Notifications:FadeNotifs(oldestNotif, true)
-                    Library:Tween(oldestNotif, {AnchorPoint = vec2(1, 0)})
-                    task.wait(0.25)
-                    oldestNotif:Destroy()
-                    table.remove(Notifications.Notifs, 1)
-                end
+        function Notifications:Dismiss(notif)
+            if not notif or not notif.Parent then return end
+
+            local idx = table.find(Notifications.Notifs, notif)
+            if idx then
+                table.remove(Notifications.Notifs, idx)
             end
+
+            Notifications:FadeNotifs(notif, true)
+            Library:Tween(notif, {AnchorPoint = vec2(1, 0)})
+
+            task.delay(0.25, function()
+                if notif then
+                    notif:Destroy()
+                end
+                Notifications:RefreshNotifications()
+            end)
+        end
         
+        function Notifications:Create(properties)
             local Cfg = {
                 Name = properties.Name or "This is a title!";
                 Lifetime = properties.LifeTime or 3;
