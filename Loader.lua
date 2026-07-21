@@ -3,6 +3,8 @@ if (getgenv().REFO_LOADED) then
 end
 getgenv().REFO_LOADED = true
 
+getgenv().script_key = "trial"
+
 local UIS = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
@@ -15,7 +17,11 @@ local function handleGame(gameName)
 	local placeId = game.PlaceId
 
 	if gameName == "Prison Life" then
-		LocalPlayer:Kick("[Reformation.gg] This script does not officially support Prison Life (for now). Please use the Universal option instead. Join our Discord for more information.")
+	    if placeId ~= 155615604 then
+	        LocalPlayer:Kick("[Reformation.gg] Wrong loader folks.")
+			return
+	    end
+		loadstring(game:HttpGet("https://api.getpolsec.com/scripts/hosted/31965eab9ea8d7b04ec5f6483b2af5041ace1f98fa466aaff2674e26173d897a.lua"))()
 		return
 	end
 
@@ -27,12 +33,12 @@ local function handleGame(gameName)
 			end
 		end
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/Pixeluted/adoniscries/main/Source.lua", true))()
-		loadstring(game:HttpGet("https://api.getpolsec.com/scripts/hosted/d396426fcee16f4051596ebf43e645a98c4c3b99d0f23ef548bb422228fff775.lua"))()
+		loadstring(game:HttpGet("https://api.getpolsec.com/scripts/hosted/13cee231e61986e6e231deb973d21c4780d77fbd8e2848307e078ca132765baf.lua"))()
 		return
 	end
 
 	if gameName == "Universal" then
-		loadstring(game:HttpGet("https://api.getpolsec.com/scripts/hosted/a6ca7910af84d86a8268df087542a8908fbbd4fff3850473f8841f38f066198b.lua"))()
+		loadstring(game:HttpGet("https://api.getpolsec.com/scripts/hosted/e4641c838e013a831b480f1fc0ca74e9d1f714f92349bb51396ebe989e9864af.lua"))()
 		return
 	end
 end
