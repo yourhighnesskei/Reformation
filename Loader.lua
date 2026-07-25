@@ -18,15 +18,20 @@ local function handleGame(gameName)
 	local placeId = game.PlaceId
 
 	if gameName == "Prison Life" then
-	    for _, yesId in ipairs(PRISONLIFE_BLOCKED) do
-			if placeId ~= yesId then
-				LocalPlayer:Kick("[Reformation.gg] Wrong loader folks.")
-				return
-			end
-		end
-		loadstring(game:HttpGet("https://api.getpolsec.com/scripts/hosted/31965eab9ea8d7b04ec5f6483b2af5041ace1f98fa466aaff2674e26173d897a.lua"))()
-		return
-	end
+        local allowed = false
+        for _, yesId in ipairs(PRISONLIFE_BLOCKED) do
+            if placeId == yesId then
+                allowed = true
+                break
+            end
+        end
+        if not allowed then
+            LocalPlayer:Kick("[Reformation.gg] Wrong loader folks.")
+            return
+        end
+        loadstring(game:HttpGet("https://api.getpolsec.com/scripts/hosted/31965eab9ea8d7b04ec5f6483b2af5041ace1f98fa466aaff2674e26173d897a.lua"))()
+        return
+    end
 
 	if gameName == "Hood Games" then
 		for _, blockedId in ipairs(DAHOOD_BLOCKED) do
@@ -136,7 +141,7 @@ function Loader:Create(info)
 
 	local Accent = Instance.new("Frame")
 	Accent.Parent = Main
-	Accent.BackgroundColor3 = Color3.fromRGB(100, 60, 220)
+	Accent.BackgroundColor3 = Color3.fromRGB(125, 152, 175)
 	Accent.BorderSizePixel = 0
 	Accent.Size = UDim2.new(1, 0, 0, 2)
 	Accent.Position = UDim2.new(0, 0, 0, 0)
