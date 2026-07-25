@@ -12,15 +12,18 @@ local LocalPlayer = Players.LocalPlayer
 local Loader = {}
 
 local DAHOOD_BLOCKED = {2788229376, 16033173781, 7213786345}
+local PRISONLIFE_BLOCKED = {155615604, 135564683255158}
 
 local function handleGame(gameName)
 	local placeId = game.PlaceId
 
 	if gameName == "Prison Life" then
-	    if placeId ~= 155615604 then
-	        LocalPlayer:Kick("[Reformation.gg] Wrong loader folks.")
-			return
-	    end
+	    for _, yesId in ipairs(PRISONLIFE_BLOCKED) do
+			if placeId ~= yesId then
+				LocalPlayer:Kick("[Reformation.gg] Wrong loader folks.")
+				return
+			end
+		end
 		loadstring(game:HttpGet("https://api.getpolsec.com/scripts/hosted/31965eab9ea8d7b04ec5f6483b2af5041ace1f98fa466aaff2674e26173d897a.lua"))()
 		return
 	end
@@ -32,12 +35,30 @@ local function handleGame(gameName)
 				return
 			end
 		end
+		for _, blockedId in ipairs(PRISONLIFE_BLOCKED) do
+			if placeId == blockedId then
+				LocalPlayer:Kick("[Reformation.gg] Wrong loader folks.")
+				return
+			end
+		end
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/Pixeluted/adoniscries/main/Source.lua", true))()
 		loadstring(game:HttpGet("https://api.getpolsec.com/scripts/hosted/13cee231e61986e6e231deb973d21c4780d77fbd8e2848307e078ca132765baf.lua"))()
 		return
 	end
 
 	if gameName == "Universal" then
+	    for _, blockedId in ipairs(PRISONLIFE_BLOCKED) do
+			if placeId == blockedId then
+				LocalPlayer:Kick("[Reformation.gg] Wrong loader folks.")
+				return
+			end
+		end
+	    for _, blockedId in ipairs(DAHOOD_BLOCKED) do
+			if placeId == blockedId then
+				LocalPlayer:Kick("[Reformation.gg] Wrong loader folks.")
+				return
+			end
+		end
 		loadstring(game:HttpGet("https://api.getpolsec.com/scripts/hosted/e4641c838e013a831b480f1fc0ca74e9d1f714f92349bb51396ebe989e9864af.lua"))()
 		return
 	end
